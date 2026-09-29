@@ -1,0 +1,570 @@
+{
+  "id": "auv_001",
+  "name": "AUV-001",
+  "physical": {
+    "mass": 18.4,
+    "volume": 0.0848,
+    "density": 1025,
+    "dimensions": {
+      "length": 1.2,
+      "width": 0.3,
+      "height": 0.3
+    },
+    "inertia": {
+      "ix": 1.8,
+      "iy": 1.8,
+      "iz": 2.2
+    }
+  },
+  "components": [
+    {
+      "id": "hull",
+      "type": "hull",
+      "name": "Hull",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "direction": [
+        1,
+        0,
+        7
+      ],
+      "max_force": 0,
+      "visible": true,
+      "locked": false,
+      "enabled": true,
+      "geometry": "cylinder",
+      "color": "#4f8ef7"
+    },
+    {
+      "id": "thruster_1",
+      "type": "thruster",
+      "name": "Thruster 1",
+      "position": [
+        0.35,
+        0.2,
+        0
+      ],
+      "direction": [
+        1,
+        0,
+        0
+      ],
+      "max_force": 15,
+      "visible": true,
+      "locked": false,
+      "enabled": true,
+      "geometry": "cylinder",
+      "color": "#ff7b54"
+    },
+    {
+      "id": "thruster_2",
+      "type": "thruster",
+      "name": "Thruster 2",
+      "position": [
+        0.35,
+        -0.2,
+        0
+      ],
+      "direction": [
+        1,
+        0,
+        0
+      ],
+      "max_force": 15,
+      "visible": true,
+      "locked": false,
+      "enabled": true,
+      "geometry": "cylinder",
+      "color": "#ff7b54"
+    },
+    {
+      "id": "thruster_3",
+      "type": "thruster",
+      "name": "Thruster 3",
+      "position": [
+        -0.35,
+        0.2,
+        0
+      ],
+      "direction": [
+        -1,
+        0,
+        0
+      ],
+      "max_force": 20,
+      "visible": true,
+      "locked": false,
+      "enabled": true,
+      "geometry": "cylinder",
+      "color": "#ff7b54"
+    },
+    {
+      "id": "thruster_4",
+      "type": "thruster",
+      "name": "Thruster 4",
+      "position": [
+        -0.35,
+        -0.2,
+        0
+      ],
+      "direction": [
+        -1,
+        0,
+        0
+      ],
+      "max_force": 15,
+      "visible": true,
+      "locked": false,
+      "enabled": true,
+      "geometry": "cylinder",
+      "color": "#ff7b54"
+    },
+    {
+      "id": "thruster_5",
+      "type": "thruster",
+      "name": "Thruster 5",
+      "position": [
+        0,
+        0.25,
+        0.12
+      ],
+      "direction": [
+        0,
+        0,
+        1
+      ],
+      "max_force": 15,
+      "visible": true,
+      "locked": false,
+      "enabled": true,
+      "geometry": "cylinder",
+      "color": "#ff7b54"
+    },
+    {
+      "id": "thruster_6",
+      "type": "thruster",
+      "name": "Thruster 6",
+      "position": [
+        0,
+        -0.25,
+        0.12
+      ],
+      "direction": [
+        0,
+        0,
+        1
+      ],
+      "max_force": 15,
+      "visible": true,
+      "locked": false,
+      "enabled": true,
+      "geometry": "cylinder",
+      "color": "#ff7b54"
+    },
+    {
+      "id": "battery",
+      "type": "battery",
+      "name": "Battery",
+      "position": [
+        0,
+        0,
+        -0.12
+      ],
+      "direction": [
+        0,
+        0,
+        1
+      ],
+      "max_force": 0,
+      "visible": true,
+      "locked": false,
+      "enabled": true,
+      "geometry": "box",
+      "color": "#5dd39e"
+    },
+    {
+      "id": "imu",
+      "type": "imu",
+      "name": "IMU",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "direction": [
+        1,
+        0,
+        0
+      ],
+      "max_force": 0,
+      "visible": true,
+      "locked": false,
+      "enabled": true,
+      "geometry": "sphere",
+      "color": "#7f7fd5"
+    },
+    {
+      "id": "depth_sensor",
+      "type": "depth",
+      "name": "Depth Sensor",
+      "position": [
+        0,
+        0,
+        -0.15
+      ],
+      "direction": [
+        0,
+        0,
+        -1
+      ],
+      "max_force": 0,
+      "visible": true,
+      "locked": false,
+      "enabled": true,
+      "geometry": "sphere",
+      "color": "#f7c873"
+    },
+    {
+      "id": "hull_copy_954984",
+      "type": "hull",
+      "name": "Hull Copy",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "direction": [
+        1,
+        0,
+        7
+      ],
+      "max_force": 0,
+      "visible": true,
+      "locked": false,
+      "enabled": true,
+      "geometry": "cylinder",
+      "color": "#4f8ef7",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "hull_copy_954984_copy_963334",
+      "type": "hull",
+      "name": "Hull Copy Copy",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "direction": [
+        1,
+        0,
+        7
+      ],
+      "max_force": 0,
+      "visible": true,
+      "locked": false,
+      "enabled": true,
+      "geometry": "cylinder",
+      "color": "#4f8ef7",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "hull_copy_993453",
+      "type": "hull",
+      "name": "Hull Copy",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "direction": [
+        1,
+        0,
+        7
+      ],
+      "max_force": 0,
+      "visible": true,
+      "locked": false,
+      "enabled": true,
+      "geometry": "cylinder",
+      "color": "#4f8ef7",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "hull_copy_016833",
+      "type": "hull",
+      "name": "Hull Copy",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "direction": [
+        1,
+        0,
+        7
+      ],
+      "max_force": 0,
+      "visible": true,
+      "locked": false,
+      "enabled": true,
+      "geometry": "cylinder",
+      "color": "#4f8ef7",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "hull_copy_016833_copy_076713",
+      "type": "hull",
+      "name": "Hull Copy Copy",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "direction": [
+        1,
+        0,
+        7
+      ],
+      "max_force": 0,
+      "visible": true,
+      "locked": false,
+      "enabled": true,
+      "geometry": "cylinder",
+      "color": "#4f8ef7",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "thruster_350330",
+      "type": "thruster",
+      "name": "Thruster 350330",
+      "parent": "auv_001",
+      "position": [
+        1.25,
+        -2.5,
+        0.75
+      ],
+      "direction": [
+        1,
+        0,
+        0
+      ],
+      "max_force": 42.5,
+      "visible": true,
+      "locked": false,
+      "enabled": true,
+      "geometry": "box",
+      "color": "#8ecae6",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      },
+      "visual": {
+        "enabled": true,
+        "geometry": "box",
+        "mesh": null,
+        "color": "#8ecae6"
+      },
+      "physics": {
+        "enabled": true,
+        "mass": 0.2,
+        "volume": 0.0005
+      },
+      "properties": {
+        "thrust_axis": [
+          1,
+          0,
+          0
+        ],
+        "max_force": 10
+      },
+      "locked_properties": []
+    },
+    {
+      "id": "thruster_364502",
+      "type": "thruster",
+      "name": "Thruster 364502",
+      "parent": "auv_001",
+      "position": [
+        1.25,
+        -2.5,
+        0.75
+      ],
+      "direction": [
+        1,
+        0,
+        0
+      ],
+      "max_force": 42.5,
+      "visible": false,
+      "locked": false,
+      "enabled": true,
+      "geometry": "box",
+      "color": "#8ecae6",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      },
+      "visual": {
+        "enabled": false,
+        "geometry": "box",
+        "mesh": null,
+        "color": "#8ecae6"
+      },
+      "physics": {
+        "enabled": true,
+        "mass": 0.2,
+        "volume": 0.0005
+      },
+      "properties": {
+        "thrust_axis": [
+          1,
+          0,
+          0
+        ],
+        "max_force": 10
+      },
+      "locked_properties": []
+    },
+    {
+      "id": "thruster_710369",
+      "type": "thruster",
+      "name": "Thruster 710369",
+      "parent": "auv_001",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "direction": [
+        1,
+        0,
+        0
+      ],
+      "max_force": 10,
+      "visible": true,
+      "locked": false,
+      "enabled": true,
+      "geometry": "box",
+      "color": "#8ecae6",
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      },
+      "visual": {
+        "enabled": true,
+        "geometry": "box",
+        "mesh": null,
+        "color": "#8ecae6"
+      },
+      "physics": {
+        "enabled": true,
+        "mass": 0.2,
+        "volume": 0.0005
+      },
+      "properties": {
+        "thrust_axis": [
+          1,
+          0,
+          0
+        ],
+        "max_force": 10
+      },
+      "locked_properties": []
+    }
+  ],
+  "buoyancy": {
+    "enabled": true,
+    "fluid_density": 1025,
+    "displacement_volume": 0.0848
+  },
+  "controller": {
+    "type": "pid",
+    "parameters": {
+      "depth_kp": 1.2,
+      "yaw_kp": 1.1
+    }
+  }
+}
