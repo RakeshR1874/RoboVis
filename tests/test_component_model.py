@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from fastapi.testclient import TestClient
+
 from robot.assembly import (
     add_component,
     delete_component,
@@ -11,6 +13,9 @@ from robot.assembly import (
 from robot.engineering.engine import compute_engineering_report
 from robot.fixtures.auv_001 import create_auv001_fixture
 from robot.generators.sdf_generator import generate_sdf
+from robot.generators.urdf_generator import generate_urdf
+from robot.schemas.robot_config import RobotConfig
+from services.api.app.main import app
 
 
 def test_add_and_delete_component():
@@ -117,3 +122,103 @@ def test_engineering_and_sdf_compatibility_with_component_model():
     assert report.buoyancy_status in {"FLOATING", "NEUTRAL", "SINKING"}
     assert '<sdf version="1.10">' in sdf
     assert 'AUV-001' in sdf
+
+
+def test_generic_robot_model_supports_assets_links_and_joints():
+    robot = RobotConfig(
+        id="arm_01",
+        name="Arm Test",
+        components=[
+            {
+                "id": "base_link",
+                "type": "base",
+                "name": "Base",
+                "transform": {"position": [0.0, 0.0, 0.0], "rotation": [0.0, 0.0, 0.0]},
+                "visual": {"enabled": True, "geometry": "box", "mesh": "base.stl"},
+                "physics": {"enabled": True, "mass": 2.0},
+            },
+            {
+                "id": "joint_1",
+                "type": "joint_controller",
+                "name": "Joint 1",
+                "parent": "base_link",
+                "visual": {"enabled": False, "geometry": "box"},
+                "physics": {"enabled": False},
+            },
+        ],
+        links=[
+            {"id": "base_link", "name": "Base Link", "parent": None, "transform": {"position": [0.0, 0.0, 0.0], "rotation": [0.0, 0.0, 0.0]}},
+            {"id": "arm_link", "name": "Arm Link", "parent": "base_link", "transform": {"position": [0.1, 0.0, 0.0], "rotation": [0.0, 0.0, 0.0]}},
+        ],
+        joints=[
+            {"id": "joint_1", "type": "revolute", "parent": "base_link", "child": "arm_link", "axis": [0.0, 0.0, 1.0], "limits": {"lower": -1.57, "upper": 1.57}, "initial_position": 0.0},
+        ],
+        actuators=[{"id": "actuator_1", "type": "servo", "joint": "joint_1", "max_torque": 2.5}],
+        sensors=[{"id": "imu_1", "type": "imu", "frame": "base_link", "transform": {"position": [0.0, 0.0, 0.0], "rotation": [0.0, 0.0, 0.0]}}],
+        assets=[{"id": "mesh_1", "type": "stl", "path": "assets/base.stl", "name": "Base STL", "scale": [1.0, 1.0, 1.0]}],
+    )
+
+    urdf = generate_urdf(robot)
+    assert '<robot name="Arm Test"' in urdf
+    assert '<joint name="joint_1" type="revolute">' in urdf
+    assert 'assets/base.stl' in urdf or 'base.stl' in urdf
+    assert 'arm_link' in urdf
+
+
+def test_robot_artifacts_route_generates_sdf_and_urdf_payloads():
+    client = TestClient(app)
+    payload = create_auv001_fixture()
+    payload["components"][0]["mesh"] = {"asset": "asset_hull_001", "scale": [1.0, 1.0, 1.0]}
+    payload["components"][0]["visual"]["mesh"] = {"asset": "asset_hull_001", "scale": [1.0, 1.0, 1.0]}
+    payload["assets"] = [{"id": "asset_hull_001", "name": "Hull STL", "path": "/tmp/hull.stl", "uri": "file:///tmp/hull.stl", "type": "stl"}]
+
+    response = client.post("/api/robot/artifacts", json=payload)
+
+    assert response.status_code == 200
+    body = response.json()
+    assert '<sdf version="1.10">' in body["sdf"]
+    assert '<robot name="AUV-001"' in body["urdf"]
+    assert 'hull.stl' in body["urdf"] or 'tmp/hull.stl' in body["urdf"] or 'asset_hull_001' in body["urdf"]
+
+
+def test_valid_stl_upload_and_asset_assignment_round_trip():
+    client = TestClient(app)
+    stl_payload = b"""solid hull\nfacet normal 0 0 1\n  outer loop\n    vertex 0 0 0\n    vertex 1 0 0\n    vertex 0 1 0\n  endloop\nendfacet\nendsolid hull\n"""
+    upload = client.post(
+        "/api/assets/upload",
+        files={"file": ("hull_uploaded.stl", stl_payload, "model/stl")},
+    )
+    assert upload.status_code == 200, upload.text
+    asset = upload.json()["asset"]
+    assert asset["filename"].endswith(".stl")
+
+    listed = client.get("/api/assets")
+    assert listed.status_code == 200
+    listed_ids = {entry["id"] for entry in listed.json()["assets"]}
+    assert asset["id"] in listed_ids
+
+    robot = create_auv001_fixture()
+    robot["assets"] = [
+        {"id": asset["id"], "name": asset["name"], "path": asset["path"], "uri": asset["uri"], "type": "stl"}
+    ]
+    robot["components"][0]["asset_id"] = asset["id"]
+    robot["components"][0]["mesh"] = {"asset": asset["id"], "scale": [1.0, 1.0, 1.0]}
+    robot["components"][0]["visual"]["mesh"] = {"asset": asset["id"], "scale": [1.0, 1.0, 1.0]}
+
+    artifacts = client.post("/api/robot/artifacts", json=robot)
+    assert artifacts.status_code == 200
+    body = artifacts.json()
+    assert asset["filename"] in body["urdf"] or asset["id"] in body["urdf"] or asset["path"] in body["urdf"]
+    assert asset["filename"] in body["sdf"] or asset["id"] in body["sdf"] or asset["path"] in body["sdf"]
+
+
+def test_invalid_placeholder_stl_upload_is_rejected():
+    client = TestClient(app)
+    invalid = b"solid test\nendsolid test\n"
+    response = client.post(
+        "/api/assets/upload",
+        files={"file": ("placeholder.stl", invalid, "model/stl")},
+    )
+
+    assert response.status_code == 400
+    assert "valid STL" in response.json()["detail"]

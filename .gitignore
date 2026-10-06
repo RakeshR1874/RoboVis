@@ -35,3 +35,8 @@ log/
 
 # OS
 .DS_Store
+services/api/assets/
+
+# User-uploaded / external robot assets
+services/api/assets/
+services/api/data/assets.json

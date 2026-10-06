@@ -14,6 +14,7 @@ export interface RobotComponent {
   enabled?: boolean
   geometry?: string
   color?: string
+  asset_id?: string
   transform?: {
     position: Vector3
     rotation: Vector3
@@ -39,6 +40,18 @@ export interface RobotComponent {
   }
 }
 
+export interface AssetRecord {
+  id: string
+  name: string
+  filename: string
+  path: string
+  uri: string
+  type: string
+  size?: number
+  uploaded_at?: string
+  metadata?: Record<string, unknown>
+}
+
 export interface RobotConfig {
   id: string
   name: string
@@ -59,6 +72,7 @@ export interface RobotConfig {
     parameters: Record<string, number | string>
   }
   components: RobotComponent[]
+  assets?: AssetRecord[]
 }
 
 export interface EngineeringReport {

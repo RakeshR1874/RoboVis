@@ -56,8 +56,21 @@ class VisualSpec(BaseModel):
 
     enabled: bool = True
     geometry: str = "box"
-    mesh: str | None = None
+    mesh: str | dict[str, Any] | None = None
     color: str | None = None
+
+
+class AssetSpec(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
+    id: str
+    name: str
+    type: str = "mesh"
+    path: str | None = None
+    uri: str | None = None
+    format: str | None = None
+    scale: list[float] = Field(default_factory=lambda: [1.0, 1.0, 1.0])
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
 
 class PhysicsSpec(BaseModel):
@@ -68,6 +81,55 @@ class PhysicsSpec(BaseModel):
     volume: float | None = None
     density: float | None = None
     inertia: dict[str, float] = Field(default_factory=lambda: {"ix": 1.0, "iy": 1.0, "iz": 1.0})
+
+
+class LinkSpec(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
+    id: str
+    name: str
+    parent: str | None = None
+    transform: Transform = Field(default_factory=Transform)
+    visual: VisualSpec = Field(default_factory=VisualSpec)
+    physics: PhysicsSpec = Field(default_factory=PhysicsSpec)
+    properties: dict[str, Any] = Field(default_factory=dict)
+    mesh: str | dict[str, Any] | None = None
+
+
+class JointSpec(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
+    id: str
+    type: str = "fixed"
+    parent: str
+    child: str
+    axis: list[float] = Field(default_factory=lambda: [1.0, 0.0, 0.0])
+    origin: Transform = Field(default_factory=Transform)
+    limits: dict[str, float] = Field(default_factory=lambda: {"lower": 0.0, "upper": 0.0})
+    damping: float | None = None
+    friction: float | None = None
+    initial_position: float | None = None
+    properties: dict[str, Any] = Field(default_factory=dict)
+
+
+class ActuatorSpec(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
+    id: str
+    type: str = "servo"
+    joint: str | None = None
+    parameters: dict[str, Any] = Field(default_factory=dict)
+    properties: dict[str, Any] = Field(default_factory=dict)
+
+
+class SensorSpec(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
+    id: str
+    type: str = "sensor"
+    frame: str | None = None
+    transform: Transform = Field(default_factory=Transform)
+    configuration: dict[str, Any] = Field(default_factory=dict)
 
 
 class Component(BaseModel):
@@ -91,7 +153,7 @@ class Component(BaseModel):
     direction: list[float] | None = None
     max_force: float | None = None
     geometry: str | None = None
-    mesh: dict[str, Any] | None = None
+    mesh: str | dict[str, Any] | None = None
 
     @model_validator(mode="before")
     @classmethod
@@ -143,5 +205,12 @@ class RobotConfig(BaseModel):
     name: str
     physical: PhysicalDefinition = Field(default_factory=PhysicalDefinition)
     components: list[Component] = Field(default_factory=list)
+    links: list[LinkSpec] = Field(default_factory=list)
+    joints: list[JointSpec] = Field(default_factory=list)
+    actuators: list[ActuatorSpec] = Field(default_factory=list)
+    sensors: list[SensorSpec] = Field(default_factory=list)
+    assets: list[AssetSpec] = Field(default_factory=list)
     buoyancy: BuoyancyConfig = Field(default_factory=BuoyancyConfig)
     controller: ControllerConfig = Field(default_factory=ControllerConfig)
+    controllers: list[ControllerConfig] = Field(default_factory=list)
+    environment: dict[str, Any] = Field(default_factory=dict)
