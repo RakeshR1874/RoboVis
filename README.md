@@ -1,16 +1,7 @@
-# AUV Control Platform
+RoboVis is built around a simple idea:
 
-Intelligent engineering workspace for AUV/ROV development.
+The first step into robotics should be visual, interactive, and approachable.
 
-Core architecture:
+Robot description formats, coordinate transformations, simulation environments, and ROS tooling are powerful, but they can create a steep initial learning curve.
 
-Engineer
-→ Canonical Robot Configuration
-→ Validation / Physics
-→ SDF Generation
-→ ROS 2 + Gazebo
-→ Telemetry
-→ Web Workspace
-
-The canonical robot configuration is the source of truth.
-URDF/SDF are generated artifacts.
+RoboVis aims to provide a visual bridge between a robot you can imagine or physically build and a robot description that software can understand.
